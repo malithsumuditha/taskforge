@@ -1,0 +1,41 @@
+services:
+ db:
+   container_name: taskforge-postgresql
+   image: postgres:16
+   environment:
+     POSTGRES_USER: postgres
+     POSTGRES_PASSWORD: Malith10a
+     POSTGRES_DB: taskforge
+   volumes:
+     - db_data:/var/lib/postgresql/data
+   ports:
+     - "5434:5432"
+   networks:
+     - db
+   restart: unless-stopped
+
+ rabbitmq:
+   image: rabbitmq:3-management
+   container_name: taskforge-rabbitmq
+   ports:
+     - "5672:5672"
+     - "15672:15672"
+   networks:
+     - db
+   restart: unless-stopped
+
+ redis:
+    image: redis:7
+    container_name: taskforge-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - db
+    restart: unless-stopped
+
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db_data:
